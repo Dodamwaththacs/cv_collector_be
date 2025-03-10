@@ -53,7 +53,6 @@ def parse_cv_endpoint():
         cv_data = extract_cv_data(temp_pdf_path)
 
         # cv_data = "CV Data"
-        # send_email("chamikasandun3131@gmail.com")
         store_applicant(cv_data, s3_url)
 
         add_user (name, email, phone, timezone)
