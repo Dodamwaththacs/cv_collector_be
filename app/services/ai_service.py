@@ -8,6 +8,8 @@ from app.config import Config
 genai.configure(api_key=Config.GEMINI_API_KEY)
 
 def parse_cv(cv_text):
+
+    print("inside parse_cv")
     """Parses CV using Gemini AI model."""
     if not cv_text:
         return None
@@ -16,19 +18,50 @@ def parse_cv(cv_text):
     model = genai.GenerativeModel('gemini-1.5-flash')  # Use the correct model name
 
     prompt = f"""
-    Extract the following information from the CV text and return it in JSON format:
+    Extract the following information from the CV text and return it in **valid JSON format**:
 
-    - Personal information (name, email, phone number, address)
-    - Education (degrees, institutions, dates)
-    - Qualifications (skills, certifications)
-    - Projects (project names, descriptions)
+    - **Personal Information**: name, email, phone number, address  
+    - **Education**: degrees, institutions, dates  
+    - **Qualifications**: skills, certifications  
+    - **Projects**: project names, descriptions  
 
-    CV Text:
-    {cv_text}
+    **CV Text:**  
+    {cv_text}  
+
+    The output **must strictly follow** this JSON structure:  
+    ```json
+    {{
+      "personal_information": {{
+        "name": "",
+        "email": "",
+        "phone": "",
+        "address": ""
+      }},
+      "education": [
+        {{
+          "degree": "",
+          "institution": "",
+          "date": ""
+        }}
+      ],
+      "qualifications": {{
+        "skills": [],
+        "certifications": []
+      }},
+      "projects": [
+        {{
+          "name": "",
+          "description": ""
+        }}
+      ]
+    }}
     """
+
 
     try:
         response = model.generate_content(prompt)
+
+        print("gemini responce",response)
 
         if hasattr(response, 'text'):
             return response.text

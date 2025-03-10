@@ -23,9 +23,9 @@ def extract_cv_data(pdf_path):
     if not cv_text:
         return None
 
-    print(cv_text)
-
+    print("before parse_cv")
     json_response = parse_cv(cv_text)
+    print(json_response)
     if not json_response:
         return None
 
