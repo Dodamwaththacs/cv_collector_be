@@ -1,0 +1,11 @@
+services:
+  db:
+    image: mysql:8.0
+    container_name: mysql_cv_collector
+    environment:
+      MYSQL_ROOT_PASSWORD: 12345
+      MYSQL_DATABASE: cv_collector
+      MYSQL_USER: user
+      MYSQL_PASSWORD: 12345
+    ports:
+      - "3307:3306"

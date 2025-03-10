@@ -1,20 +1,25 @@
 from flask import Blueprint, request, jsonify
 import tempfile
 import os
-from app.services.pdf_service import extract_cv_data
-from app.services.storage_service import upload_file_to_s3
-from app.services.email_service import send_email
 from app.services.goolesheet_service import store_data
+from app.services.pdf_service import extract_cv_data
+from app.models import User
+from app.database import db
 
 cv_bp = Blueprint('cv_bp', __name__)
 
 @cv_bp.route('/parse_cv', methods=['POST'])
 def parse_cv_endpoint():
-    """API endpoint to parse CV from PDF."""
+
     if 'pdf' not in request.files:
         return jsonify({'error': 'No PDF file provided'}), 400
 
     pdf_file = request.files['pdf']
+    name = request.form.get('name')
+    email = request.form.get('email')
+
+    print(name)
+    print(email)
 
     if pdf_file.filename == '':
         return jsonify({'error': 'No selected file'}), 400
@@ -30,9 +35,9 @@ def parse_cv_endpoint():
         # s3_url = upload_file_to_s3(temp_pdf_path, s3_key)
         s3_url = "https://s3.amazonaws.com/your-bucket-name/uploads/your-file-name.pdf"
 
-        # cv_data = extract_cv_data(temp_pdf_path)
+        cv_data = extract_cv_data(temp_pdf_path)
 
-        cv_data = "CV Data"
+        # cv_data = "CV Data"
         # send_email("chamikasandun3131@gmail.com")
         store_data()
 
@@ -46,3 +51,17 @@ def parse_cv_endpoint():
 
     except Exception as e:
         return jsonify({'error': f'An error occurred: {str(e)}'}), 500
+
+
+@cv_bp.route('/add_user', methods=['POST'])
+def add_user():
+    data = request.json
+    if not data or 'name' not in data or 'email' not in data:
+        return jsonify({'error': 'Invalid input'}), 400
+
+    new_user = User(name=data['name'], email=data['email'])
+    db.session.add(new_user)
+    db.session.commit()
+
+    return jsonify({'message': 'User added successfully',
+                    'user': {'id': new_user.id, 'name': new_user.name, 'email': new_user.email}})
