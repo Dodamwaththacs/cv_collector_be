@@ -13,4 +13,5 @@ scheduler.add_job(func=scheduled_task, trigger="interval", seconds=30)
 scheduler.start()
 
 if __name__ == '__main__':
-    app.run(debug=True)  # Keep debug=True for local testing
+    app.run(host='0.0.0.0', port=5000, debug=True)
+

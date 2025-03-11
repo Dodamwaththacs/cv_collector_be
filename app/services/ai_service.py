@@ -46,6 +46,8 @@ def parse_cv(cv_text):
       ],
       "qualifications":[
       ],
+      "certifications":[
+      ],
       "projects": [
         {{
           "name": "",
