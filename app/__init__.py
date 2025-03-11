@@ -5,7 +5,6 @@ from flask_migrate import Migrate
 from flask_cors import CORS
 
 
-
 def create_app(config_class=Config):
     app = Flask(__name__)
     CORS(app)
@@ -14,12 +13,11 @@ def create_app(config_class=Config):
     db.init_app(app)
     migrate = Migrate(app, db)
 
-
+    # Import models here to ensure they are detected
+    from app.models import User  # Ensure this is imported
 
     # Import and register blueprints
     from app.routes.cv_routes import cv_bp
     app.register_blueprint(cv_bp)
-
-
 
     return app

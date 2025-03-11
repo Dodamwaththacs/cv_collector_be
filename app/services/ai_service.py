@@ -44,10 +44,8 @@ def parse_cv(cv_text):
           "date": ""
         }}
       ],
-      "qualifications": {{
-        "skills": [],
-        "certifications": []
-      }},
+      "qualifications":[
+      ],
       "projects": [
         {{
           "name": "",
@@ -61,7 +59,6 @@ def parse_cv(cv_text):
     try:
         response = model.generate_content(prompt)
 
-        print("gemini responce",response)
 
         if hasattr(response, 'text'):
             return response.text

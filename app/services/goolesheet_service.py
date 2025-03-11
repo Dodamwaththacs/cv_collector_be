@@ -39,7 +39,7 @@ def store_applicant(cv_data, pdf_url):
         # Convert lists to JSON strings or comma-separated values
         education_str = json.dumps(education)  # Store as JSON
         projects_str = json.dumps(projects)  # Store as JSON
-        skills_str = ", ".join(qualifications["skills"])  # Store as CSV
+        skills_str = ", ".join(qualifications)  # Store as CSV
         certifications_str = ", ".join(qualifications["certifications"]) if qualifications["certifications"] else "None"
 
         # Append data to Google Sheet

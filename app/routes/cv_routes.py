@@ -1,13 +1,12 @@
 from datetime import timezone
-
 from flask import Blueprint, request, jsonify
 import tempfile
 import os
+from app.services.storage_service import upload_file_to_s3
+from app.services.webhook_service import send_cv_webhook
 from app.services.goolesheet_service import store_applicant
 from app.services.pdf_service import extract_cv_data
-from app.models import User
 from app.database import get_user_by_email_or_mobile, add_user
-
 
 cv_bp = Blueprint('cv_bp', __name__)
 
@@ -47,15 +46,17 @@ def parse_cv_endpoint():
 
         # Generate a unique S3 key
         s3_key = f"uploads/{os.path.basename(temp_pdf_path)}"
-        # s3_url = upload_file_to_s3(temp_pdf_path, s3_key)
-        s3_url = "https://s3.amazonaws.com/your-bucket-name/uploads/your-file-name.pdf"
+        s3_url = upload_file_to_s3(temp_pdf_path, s3_key)
+        # s3_url = "https://s3.amazonaws.com/your-bucket-name/uploads/your-file-name.pdf"
 
         cv_data = extract_cv_data(temp_pdf_path)
 
         # cv_data = "CV Data"
         store_applicant(cv_data, s3_url)
 
+
         add_user (name, email, phone, timezone)
+        send_cv_webhook (cv_data, name, email)
         # Clean up the temporary file
         os.unlink(temp_pdf_path)
 
