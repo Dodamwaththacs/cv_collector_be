@@ -56,7 +56,7 @@ def parse_cv_endpoint():
 
 
         add_user (name, email, phone, timezone)
-        # send_cv_webhook (cv_data, name, email)
+        send_cv_webhook (cv_data, name, email)
         # Clean up the temporary file
         os.unlink(temp_pdf_path)
 

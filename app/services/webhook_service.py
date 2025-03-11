@@ -21,7 +21,7 @@ def send_cv_webhook(cv_data, name, email):
             "metadata": {
                 "applicant_name": name,
                 "email": email,
-                "status": "testing",
+                "status": "prod",
                 "cv_processed": True,
                 "processed_timestamp": "2025-02-28T12:00:00Z"
             }
