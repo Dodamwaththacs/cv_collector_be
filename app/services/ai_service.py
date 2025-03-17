@@ -63,6 +63,7 @@ def parse_cv(cv_text):
 
 
         if hasattr(response, 'text'):
+            print("Gemini worked")
             return response.text
         else:
             return None
